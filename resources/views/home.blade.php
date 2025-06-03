@@ -136,6 +136,45 @@
           });
       }
     });
+    
+        // Adiciona um listener para o evento de envio do formulário com id "formEndereco"
+    document.getElementById('formEndereco').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Obtém o token CSRF que está no meta tag da página para proteger a requisição POST
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+    // Envia uma requisição HTTP POST usando fetch para a rota Laravel definida
+    fetch("{{ route('enderecos.store') }}", {
+            method: 'POST', 
+            headers: {
+            'Content-Type': 'application/json', 
+            'X-CSRF-TOKEN': token 
+            },
+            // Corpo da requisição convertido para JSON, com os dados do formulário
+            body: JSON.stringify({
+            cep: document.getElementById('cep').value,               
+            logradouro: document.getElementById('logradouro').value, 
+            rua: document.getElementById('rua').value,
+            bairro: document.getElementById('bairro').value,         
+            cidade: document.getElementById('cidade').value,        
+            estado: document.getElementById('estado').value,        
+            numero: document.getElementById('numero').value          
+            })
+    })
+    .then(res => res.json()) // Converte a resposta da requisição para JSON
+    .then(data => {
+        // Se não existir a propriedade "message", exibe "Endereço salvo!"
+        document.getElementById('mensagem').innerText = data.message || 'Endereço salvo!';
+        document.getElementById('formEndereco').reset();
+    })
+    .catch(() => {
+        document.getElementById('mensagem').innerText = 'Erro ao salvar endereço.';
+    });
+    });
+  </script>
+</body>
+</html>
 
 </body>
 </html>
