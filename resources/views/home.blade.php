@@ -111,7 +111,31 @@
     <div id="mensagem" class="mensagem"></div>
   </div>
 
-  <!-- Script JavaScript para busca de CEP e envio do formulário -->
+<!-- Script JavaScript para busca de CEP e envio do formulário -->
+  <script>
+    // Quando o campo de CEP perder o foco (evento 'blur')
+    document.getElementById('cep').addEventListener('blur', function () {
+      const cep = this.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+      // Verifica se o CEP tem 8 dígitos
+      if (cep.length === 8) {
+        // Consulta a API ViaCEP
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.erro) {
+              alert('CEP não encontrado!');
+            } else {
+              // Preenche os campos com os dados do endereço
+              document.getElementById('logradouro').value = data.logradouro;
+              document.getElementById('rua').value = data.logradouro;
+              document.getElementById('bairro').value = data.bairro;
+              document.getElementById('cidade').value = data.localidade;
+              document.getElementById('estado').value = data.uf;
+            }
+          });
+      }
+    });
 
 </body>
 </html>
