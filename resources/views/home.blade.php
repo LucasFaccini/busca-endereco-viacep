@@ -1,42 +1,54 @@
-@extends('layout.master')
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <!-- Token CSRF necessário para requisições POST seguras no Laravel -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-@section('content')
-    <!-- Estrutura do Formulário -->
-    {{-- 
-        Desenvolva um formulário para cadastro de endereços com os seguintes campos:
-        - CEP
-        - Logradouro
-        - Rua
-        - Bairro
-        - Cidade
-        - Estado
-        - Número
-        
-        O formulário deverá conter um botão de "Salvar" que será utilizado para enviar os dados.
-        Não se esqueça de aplicar as classes CSS necessárias para manter a padronização do layout.
-    --}}
-@endsection
+  <title>Cadastro de Endereço</title>
 
-@section('script')
-    <!-- Integração com o ViaCEP e Envio de Dados -->
-    {{-- 
-        1. Integração com o ViaCEP:
-            - No evento "blur" do campo de CEP, faça uma consulta à API do ViaCEP: https://viacep.com.br/ws/{cep}/json/.
-            - Preencha os campos do formulário automaticamente com os dados retornados (logradouro, bairro, cidade, estado, etc.).
-            - Certifique-se de tratar os erros, como CEPs inválidos ou problemas de conexão com a API.
-        
-        2. Envio de Dados via AJAX:
-            - Ao submeter o formulário, use AJAX para enviar os dados para a rota:
-              {{ route('enderecos.store') }}
-            - O método HTTP deve ser POST.
-            - Certifique-se de capturar e exibir mensagens de erro caso o salvamento falhe.
-        
-        3. Estrutura do Script:
-            - Utilize a biblioteca jQuery para facilitar o desenvolvimento.
-            - Insira mensagens de feedback (ex.: "Endereço salvo com sucesso!" ou "Erro ao salvar o endereço").
-            - Opcional: Após salvar, limpe o formulário para permitir novos cadastros.
-        
-        Observação: Lembre-se de garantir que o CSRF token esteja incluído no envio da requisição AJAX.
-    --}}
-@endsection
+</head>
+<body>
 
+  <!-- Container principal centralizado -->
+  <div class="container">
+    <!-- Título da página -->
+    <h1>Cadastro de Endereço</h1>
+
+    <!-- Formulário com campos de endereço -->
+    <form id="formEndereco">
+
+      <!-- Campo para digitar o CEP -->
+      <input type="text" id="cep" name="cep" placeholder="CEP" required><br>
+
+      <!-- Campo preenchido automaticamente pelo CEP -->
+      <input type="text" id="logradouro" name="logradouro" placeholder="Logradouro" required><br>
+
+      <!-- Novo campo manual para Rua -->
+      <input type="text" id="rua" name="rua" placeholder="Rua" required><br>
+
+      <!-- Campo preenchido automaticamente pelo CEP -->
+      <input type="text" id="bairro" name="bairro" placeholder="Bairro" required><br>
+
+      <!-- Campo preenchido automaticamente pelo CEP -->
+      <input type="text" id="cidade" name="cidade" placeholder="Cidade" required><br>
+
+      <!-- Campo preenchido automaticamente pelo CEP -->
+      <input type="text" id="estado" name="estado" placeholder="Estado" required><br>
+
+      <!-- Campo manual para número da residência -->
+      <input type="text" id="numero" name="numero" placeholder="Número" required><br>
+
+      <!-- Botão para enviar o formulário -->
+      <button type="submit">Salvar</button>
+    </form>
+
+    <!-- Div usada para exibir mensagens de sucesso ou erro -->
+    <div id="mensagem" class="mensagem"></div>
+  </div>
+
+  <!-- Script JavaScript para busca de CEP e envio do formulário -->
+
+</body>
+</html>
