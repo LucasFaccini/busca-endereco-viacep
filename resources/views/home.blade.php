@@ -50,5 +50,58 @@
 @endsection
 
 @section('script')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            $('#cep').on('blur', function () {
+                const cep = $(this).val().replace(/\D/g, '');
+                if (cep.length !== 8) {
+                    $('#mensagem').text('CEP inválido.');
+                    return;
+                }
+
+                $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function (data) {
+                    if (data.erro) {
+                        $('#mensagem').text('CEP não encontrado.');
+                        return;
+                    }
+
+                    $('#logradouro').val(data.logradouro);
+                    $('#bairro').val(data.bairro);
+                    $('#cidade').val(data.localidade);
+                    $('#estado').val(data.uf);
+                }).fail(function () {
+                    $('#mensagem').text('Erro ao buscar CEP.');
+                });
+            });
+
+            $('#cep-form').on('submit', function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "{{ route('enderecos.store') }}",
+                    type: 'POST',
+                    data: {
+                        _token: $('input[name="_token"]').val(),
+                        cep: $('#cep').val(),
+                        logradouro: $('#logradouro').val(),
+                        rua: $('#rua').val(),
+                        bairro: $('#bairro').val(),
+                        cidade: $('#cidade').val(),
+                        estado: $('#estado').val(),
+                        numero: $('#numero').val()
+                    },
+                    success: function (response) {
+                        $('#mensagem').text(response.message || 'Endereço salvo com sucesso!');
+                        $('#cep-form')[0].reset();
+                    },
+                    error: function (xhr) {
+                        $('#mensagem').text('Erro ao salvar o endereço.');
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
